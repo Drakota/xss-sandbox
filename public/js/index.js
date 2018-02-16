@@ -3,7 +3,7 @@ var username = '';
 
 $(document).ready(function(){
     update();
-    setInterval(update, 1000);
+    //setInterval(update, 1000);
 });
 
 function update () {
@@ -30,7 +30,7 @@ function refreshChat(res)
     }
     else messageClass = "sent";
     $('#messages').append($('<li class="'+messageClass+'">').html(`
-      <img src="/images/default.png" alt="" />
+      <img rel="preload" src="/images/default.png" alt="" />
       <p style="word-break: break-all;"><em style="font-size:15px;font-weight: bold;">`+message.username+`</em>
       <em style="font-size:15px;font-weight:lighter;margin-left:10px;float:right;">`+moment(message.createAt).fromNow()+`</em><br>`+message.body+`</p>
     `));
@@ -65,7 +65,7 @@ socket.on('newMessage', function(message) {
     }
     else messageClass = "sent";
     $('#messages').append($('<li class="'+messageClass+'">').html(`
-      <img src="/images/default.png" alt="" />
+      <img rel="preload" src="/images/default.png" alt="" />
       <p style="word-break: break-all;"><em style="font-size:15px;font-weight: bold;">`+message.username+`</em>
       <em style="font-size:15px;font-weight:lighter;margin-left:10px;float:right;">`+moment().startOf(message.createAt).fromNow()+`</em><br>`+message.body+`</p>
     `));
