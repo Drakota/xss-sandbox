@@ -24,7 +24,7 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function(message) {
-    $('#messages').append($('<li>').text(`From: ${username} - ${message.body}`));
+    $('#messages').append($('<li>').text(`From: ${message.username} - ${message.body}`));
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 });
 
