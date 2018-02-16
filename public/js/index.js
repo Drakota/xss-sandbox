@@ -25,6 +25,7 @@ socket.on('init', function (res) {
       <p><em style="font-size:15px;font-weight: bold;">`+message.username+`</em><br>`+message.body+`</p>
     `));
   });
+  $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, "fast");
 });
 
 socket.on('usersConnected', function (users) {
@@ -52,6 +53,7 @@ socket.on('newMessage', function(message) {
       <img src="/images/default.png" alt="" />
       <p><em style="font-size:15px;font-weight: bold;">`+message.username+`</em><br>`+message.body+`</p>
     `));
+    $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, "fast");
 });
 
 $("#chatBar").keyup(function(event) {

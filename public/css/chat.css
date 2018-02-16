@@ -534,14 +534,14 @@ body {
 }
 #frame .content .messages {
   height: auto;
-  min-height: calc(100% - 93px);
-  max-height: calc(100% - 93px);
+  min-height: calc(100% - 45px);
+  max-height: calc(100% - 45px);
   overflow-y: scroll;
   overflow-x: hidden;
 }
 @media screen and (max-width: 735px) {
   #frame .content .messages {
-    max-height: calc(100% - 105px);
+    max-height: calc(100% - 50px);
   }
 }
 #frame .content .messages::-webkit-scrollbar {
