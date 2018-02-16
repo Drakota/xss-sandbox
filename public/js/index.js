@@ -68,3 +68,14 @@ $("#chatBar").keyup(function(event) {
       }
     }
 });
+
+$( "#sendBtn" ).click(function() {
+  if ($("#chatBar").val() !== '') {
+    socket.emit('newMessage', {
+      id: socket.id,
+      body: $("#chatBar").val(),
+      username,
+    });
+    $("#chatBar").val('');
+  }
+});
