@@ -37,11 +37,11 @@ io.on('connection', (socket) => {
 
   socket.on('sendUsername', (username) => {
       socket.username = username;
-      var connectedString = "Connected: ";
+      var connected = [];
       for (var socketId in io.sockets.sockets) {
-          connectedString = connectedString + io.sockets.sockets[socketId].username + ", ";
+          connected.push(io.sockets.sockets[socketId].username);
       }
-      io.emit("usersConnected", connectedString);
+      io.emit("usersConnected", connected);
   });
 
 
@@ -51,11 +51,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    var connectedString = "Connected: ";
+    var connected = [];
     for (var socketId in io.sockets.sockets) {
-        connectedString = connectedString + io.sockets.sockets[socketId].username + ", ";
+        connected.push(io.sockets.sockets[socketId].username);
     }
-    io.emit("usersConnected", connectedString);
+    io.emit("usersConnected", connected);
   });
 });
 

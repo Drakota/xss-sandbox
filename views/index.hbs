@@ -1,39 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html class=''>
   <head>
-    <meta charset="utf-8">
-    <title>GloGang - Chat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+    <link rel='stylesheet prefetch' href='/css/chat.css'>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
-    <link rel="stylesheet" href="/css/chat.css">
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; margin-bottom: 60px;}
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
   </head>
   <body>
-    <nav class="site-header sticky-top py-1">
-      <div class="container d-flex flex-column flex-md-row justify-content-between">
-        <a class="py-2" href="#">
-          <i class="fa fa-comment"></i>
-        </a>
-        <a id="usersConnected" class="py-2 d-none d-md-inline-block" href="#">Users</a>
-      </div>
-    </nav>
-    <div id="messages" style="height:840px;overflow-x:hidden;">
-    </div>
-    <div class="fixed-bottom">
-      <input id="chatBar" style="margin: 0 auto;" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter message...">
+    <div id="frame">
+    	<div id="sidepanel">
+    		<div id="contacts">
+    			<ul id="contacts-panel">
+    			</ul>
+    		</div>
+    	</div>
+    	<div class="content">
+    		<div class="messages">
+    			<ul id="messages">
+    			</ul>
+    		</div>
+    		<div class="message-input">
+    			<div class="wrap">
+    			<input id="chatBar" type="text" placeholder="Write your message..." />
+    			<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+    			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+    			</div>
+    		</div>
+    	</div>
     </div>
   </body>
   <footer>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.slim.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
   </footer>

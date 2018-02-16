@@ -15,22 +15,43 @@ socket.on('connect', function () {
 
 socket.on('init', function (res) {
   res.messages.forEach(function(message) {
-    $('#messages').append($('<li>').text(`From: ${message.username} - ${message.body}`));
+    var messageClass;
+    if (message.username === username) {
+      messageClass = "replies";
+    }
+    else messageClass = "sent";
+    $('#messages').append($('<li class="'+messageClass+'">').html(`
+      <img src="/images/default.png" alt="" />
+      <p><em style="font-size:15px;font-weight: bold;">`+message.username+`</em><br>`+message.body+`</p>
+    `));
   });
-  $("#messages").scrollTop($("#messages")[0].scrollHeight);
 });
 
-socket.on('disconnect', function () {
-  console.log('Disconnected to server');
-});
-
-socket.on('usersConnected', function (usersString) {
-  $("#usersConnected").text(usersString);
+socket.on('usersConnected', function (users) {
+  $('#contacts-panel').empty();
+  users.forEach(function(user) {
+    $('#contacts-panel').append($('<li class="contact">').html(`
+      <div class="wrap">
+        <span class="contact-status online"></span>
+        <img src="/images/default.png" alt="" />
+        <div class="meta">
+          <p class="name">`+user+`</p>
+        </div>
+      </div>
+    `));
+  });
 });
 
 socket.on('newMessage', function(message) {
-    $('#messages').append($('<li>').text(`From: ${message.username} - ${message.body}`));
-    $("#messages").scrollTop($("#messages")[0].scrollHeight);
+    var messageClass;
+    if (message.username === username) {
+      messageClass = "replies";
+    }
+    else messageClass = "sent";
+    $('#messages').append($('<li class="'+messageClass+'">').html(`
+      <img src="/images/default.png" alt="" />
+      <p><em style="font-size:15px;font-weight: bold;">`+message.username+`</em><br>`+message.body+`</p>
+    `));
 });
 
 $("#chatBar").keyup(function(event) {
