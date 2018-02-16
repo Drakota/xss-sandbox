@@ -35,12 +35,27 @@ io.on('connection', (socket) => {
   console.log('New User connected');
   io.to(socket.id).emit('init', {messages});
 
+  socket.on('sendUsername', (username) => {
+      socket.username = username;
+      var connectedString = "Connected: ";
+      for (var socketId in io.sockets.sockets) {
+          connectedString = connectedString + io.sockets.sockets[socketId].username + ", ";
+      }
+      io.emit("usersConnected", connectedString);
+  });
+
+
   socket.on('newMessage', (message) => {
     messages.push(message);
     io.emit('newMessage', message);
   });
 
   socket.on('disconnect', () => {
+    var connectedString = "Connected: ";
+    for (var socketId in io.sockets.sockets) {
+        connectedString = connectedString + io.sockets.sockets[socketId].username + ", ";
+    }
+    io.emit("usersConnected", connectedString);
   });
 });
 

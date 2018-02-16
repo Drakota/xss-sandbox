@@ -10,6 +10,7 @@ function getCookie(name) {
 socket.on('connect', function () {
   console.log('Connected to server');
   username = getCookie('username');
+  socket.emit('sendUsername', username);
 });
 
 socket.on('init', function (res) {
@@ -23,11 +24,14 @@ socket.on('disconnect', function () {
   console.log('Disconnected to server');
 });
 
+socket.on('usersConnected', function (usersString) {
+  $("#usersConnected").text(usersString);
+});
+
 socket.on('newMessage', function(message) {
     $('#messages').append($('<li>').text(`From: ${message.username} - ${message.body}`));
     $("#messages").scrollTop($("#messages")[0].scrollHeight);
 });
-
 
 $("#chatBar").keyup(function(event) {
     if (event.keyCode === 13) {
