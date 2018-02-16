@@ -39,7 +39,7 @@ function refreshChat(res)
 
 socket.on('connect', function () {
   console.log('Connected to server');
-  username = getCookie('username');
+  username = getCookie('username').substring(0, 20);
   socket.emit('sendUsername', username);
 });
 
