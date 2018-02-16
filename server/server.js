@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('New User connected');
-  io.to(socket.id).emit('init', {messages});
+  io.to(socket.id).emit('refreshChat', {messages});
 
   socket.on('sendUsername', (username) => {
       socket.username = username;
@@ -44,8 +44,12 @@ io.on('connection', (socket) => {
       io.emit("usersConnected", connected);
   });
 
+  socket.on('refreshChat', () => {
+    io.to(socket.id).emit('refreshChat', {messages});
+  });
 
   socket.on('newMessage', (message) => {
+    message.createAt = Date.now();
     messages.push(message);
     io.emit('newMessage', message);
   });

@@ -1,19 +1,28 @@
 var socket = io();
 var username = '';
 
+$(document).ready(function(){
+    update();
+    setInterval(update, 1000);
+});
+
+function update () {
+    socket.emit('refreshChat');
+};
+
 function getCookie(name) {
   var value = "; " + document.cookie;
   var parts = value.split("; " + name + "=");
   if (parts.length == 2) return parts.pop().split(";").shift();
 }
 
-socket.on('connect', function () {
-  console.log('Connected to server');
-  username = getCookie('username');
-  socket.emit('sendUsername', username);
+socket.on('refreshChat', function (res) {
+  $('#messages').empty();
+  refreshChat(res);
 });
 
-socket.on('init', function (res) {
+function refreshChat(res)
+{
   res.messages.forEach(function(message) {
     var messageClass;
     if (message.username === username) {
@@ -22,10 +31,16 @@ socket.on('init', function (res) {
     else messageClass = "sent";
     $('#messages').append($('<li class="'+messageClass+'">').html(`
       <img src="/images/default.png" alt="" />
-      <p><em style="font-size:15px;font-weight: bold;">`+message.username+`</em><br>`+message.body+`</p>
+      <p style="word-break: break-all;"><em style="font-size:15px;font-weight: bold;">`+message.username+`</em>
+      <em style="font-size:15px;font-weight:lighter;margin-left:10px;float:right;">`+moment(message.createAt).fromNow()+`</em><br>`+message.body+`</p>
     `));
   });
-  $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, "fast");
+}
+
+socket.on('connect', function () {
+  console.log('Connected to server');
+  username = getCookie('username');
+  socket.emit('sendUsername', username);
 });
 
 socket.on('usersConnected', function (users) {
@@ -51,7 +66,8 @@ socket.on('newMessage', function(message) {
     else messageClass = "sent";
     $('#messages').append($('<li class="'+messageClass+'">').html(`
       <img src="/images/default.png" alt="" />
-      <p><em style="font-size:15px;font-weight: bold;">`+message.username+`</em><br>`+message.body+`</p>
+      <p style="word-break: break-all;"><em style="font-size:15px;font-weight: bold;">`+message.username+`</em>
+      <em style="font-size:15px;font-weight:lighter;margin-left:10px;float:right;">`+moment().startOf(message.createAt).fromNow()+`</em><br>`+message.body+`</p>
     `));
     $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, "fast");
 });
