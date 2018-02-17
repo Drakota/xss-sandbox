@@ -24,7 +24,7 @@ function addMessage(message) {
     <img rel="preload"src="/images/default.png" alt="" />
     <p style="word-break: break-all;">
       <em style="font-size:15px;font-weight: bold;">`+message.username+`</em>
-      <em style="font-size:15px;font-weight:lighter;margin-left:20px;float:right;">`+moment(message.createdAt).format('HH:MM')+`</em>
+      <em style="font-size:15px;font-weight:lighter;margin-left:20px;float:right;">`+moment(message.createdAt).format('HH:mm')+`</em>
       <br>
       `+content+`
     </p>
