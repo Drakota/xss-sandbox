@@ -33,15 +33,18 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('New User connected');
-  io.to(socket.id).emit('refreshChat', {messages});
+
+  function connectedUsers() {
+    var connected = [];
+    for (var socketId in io.sockets.sockets) {
+        connected.push(io.sockets.sockets[socketId].username);
+    }
+    return Array.from(new Set(connected));
+  }
 
   socket.on('sendUsername', (username) => {
       socket.username = username;
-      var connected = [];
-      for (var socketId in io.sockets.sockets) {
-          connected.push(io.sockets.sockets[socketId].username);
-      }
-      io.emit("usersConnected", connected);
+      io.emit("usersConnected", connectedUsers());
   });
 
   socket.on('refreshChat', () => {
@@ -49,17 +52,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('newMessage', (message) => {
-    message.createAt = Date.now();
+    message.createdAt = Date.now();
     messages.push(message);
     io.emit('newMessage', message);
   });
 
   socket.on('disconnect', () => {
-    var connected = [];
-    for (var socketId in io.sockets.sockets) {
-        connected.push(io.sockets.sockets[socketId].username);
-    }
-    io.emit("usersConnected", connected);
+    io.emit("usersConnected", connectedUsers());
   });
 });
 

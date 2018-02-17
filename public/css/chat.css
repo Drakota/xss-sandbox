@@ -13,6 +13,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.sent-messages {
+  width: 100% !important;
+  max-width: 205px !important;
+  border-radius: 0px !important;
+}
+
 #frame {
   width: 100%;
   height: 100vh;
