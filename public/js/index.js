@@ -15,9 +15,14 @@ function addMessage(message) {
   }
   else messageClass = "sent";
   if (typeof message.body === 'object') {
-    content = `<a href="`+message.body.data+`">
-                <img class="sent-messages" rel="preload" src="`+message.body.data+`" alt="" />
-               </a>`;
+    if (message.body.type.includes("image")) {
+      content = `<a href="`+message.body.data+`">
+                  <img class="sent-messages" rel="preload" src="`+message.body.data+`" alt="" />
+                 </a>`;
+    }
+    else {
+      content = `<i class="fa fa-file" style="margin-right:5px;"><a href="`+message.body.data+`" download="`+message.body.name+`"></i>`+message.body.name+`</a>`;
+    }
   }
   else content = message.body;
   $('#messages').append($('<li class="'+messageClass+'">').html(`
@@ -31,11 +36,6 @@ function addMessage(message) {
   `));
 }
 
-socket.on('refreshChat', function (res) {
-  $('#messages').empty();
-  refreshChat(res);
-});
-
 function refreshChat(res)
 {
   res.messages.forEach(function(message) {
@@ -43,6 +43,23 @@ function refreshChat(res)
   });
   $(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, "fast");
 }
+
+function sendMessage()
+{
+  if ($("#chatBar").val() !== '') {
+    socket.emit('newMessage', {
+      id: socket.id,
+      body: $("#chatBar").val(),
+      username,
+    });
+    $("#chatBar").val('');
+  }
+}
+
+socket.on('refreshChat', function (res) {
+  $('#messages').empty();
+  refreshChat(res);
+});
 
 socket.on('newMessage', function(message) {
   addMessage(message);
@@ -74,32 +91,17 @@ socket.on('usersConnected', function (users) {
 
 $("#chatBar").keyup(function(event) {
     if (event.keyCode === 13) {
-      if ($("#chatBar").val() !== '') {
-        socket.emit('newMessage', {
-          id: socket.id,
-          body: $("#chatBar").val(),
-          username,
-        });
-        $("#chatBar").val('');
-      }
+      sendMessage();
     }
 });
 
 $( "#sendBtn" ).click(function() {
-  if ($("#chatBar").val() !== '') {
-    socket.emit('newMessage', {
-      id: socket.id,
-      body: $("#chatBar").val(),
-      username,
-    });
-    $("#chatBar").val('');
-  }
+  sendMessage();
 });
 
 $(".fa-paperclip").click(function() {
    var input = $(document.createElement("input"));
    input.attr("type", "file");
-   input.attr("accept", "image/*");
    input.trigger("click");
    $(input).on('change', function () {
        var fr = new FileReader();
@@ -109,7 +111,8 @@ $(".fa-paperclip").click(function() {
            id: socket.id,
            body: {
              name: $(input).prop('files')[0].name,
-             data: fr.result
+             data: fr.result,
+             type: $(input).prop('files')[0].type,
            },
            username,
          });

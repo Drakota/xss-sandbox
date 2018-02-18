@@ -5,7 +5,9 @@ const socketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
+const utils = require('./utils/utils');
 const publicPath = path.join(__dirname, '../public');
+
 
 const port = process.env.PORT || 3000;
 var app = express();
@@ -16,15 +18,14 @@ var messages = [];
 app.use(express.static(publicPath));
 app.use(cookieParser());
 
-app.get('/username', (req, res) => {
-  res.render('username.hbs');
+app.get('/', function(req,res,next){
+    if (!req.cookies.username)
+      return res.redirect('/username');
+    next();
 });
 
-app.use(function(req,res,next){
-    if (!req.cookies.username) {
-      return res.redirect('/username');
-    }
-    next();
+app.get('/username', (req, res) => {
+  res.render('username.hbs');
 });
 
 app.get('/', (req, res) => {
@@ -32,19 +33,13 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('New User connected');
-
-  function connectedUsers() {
-    var connected = [];
-    for (var socketId in io.sockets.sockets) {
-        connected.push(io.sockets.sockets[socketId].username);
-    }
-    return Array.from(new Set(connected));
-  }
-
   socket.on('sendUsername', (username) => {
       socket.username = username;
-      io.emit("usersConnected", connectedUsers());
+      io.emit("usersConnected", utils.connectedUsers(io.sockets.sockets));
+  });
+
+  socket.on('disconnect', () => {
+    io.emit("usersConnected", utils.connectedUsers(io.sockets.sockets));
   });
 
   socket.on('refreshChat', () => {
@@ -55,10 +50,6 @@ io.on('connection', (socket) => {
     message.createdAt = Date.now();
     messages.push(message);
     io.emit('newMessage', message);
-  });
-
-  socket.on('disconnect', () => {
-    io.emit("usersConnected", connectedUsers());
   });
 });
 
