@@ -1,5 +1,5 @@
 # xss-sandbox
-A flawed chat application that supports file sharing, images and online users.
+A flawed chat application that supports file sharing, images and online users.  
 Try to find all the security exploits in its features.
 
 ## How to use
